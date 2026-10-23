@@ -112,6 +112,7 @@ __HAL_SPI_ENABLE(&hspi1);
   OLED_Clear();
   int16_t ball_x = -5;
   int8_t ball_y = 0;
+  Set_Ball_D(20);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -120,6 +121,7 @@ __HAL_SPI_ENABLE(&hspi1);
   {
     memset(Canvas_User, 0, sizeof(Canvas_User));
     draw_Ball(Canvas_User, ball_x, ball_y);
+    draw_Player(Canvas_User, ball_x, ball_y);
     OLED_DrawBMP(0,0,127,7,Canvas_User);
     ball_x += 2;
     ball_y ++;
