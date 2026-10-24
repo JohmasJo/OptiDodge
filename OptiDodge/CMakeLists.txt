@@ -37,7 +37,9 @@ add_executable(${CMAKE_PROJECT_NAME}
         System/Draw.h
         System/Pattern.h
         System/Game.h
-        System/Game.c)
+        System/Game.c
+        System/FreeRTOS_Program.c
+        System/FreeRTOS_Program.h)
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
@@ -50,11 +52,22 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 # Add sources to executable
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
+    FreeRTOS/Source/croutine.c
+    FreeRTOS/Source/event_groups.c
+    FreeRTOS/Source/list.c
+    FreeRTOS/Source/queue.c
+    FreeRTOS/Source/stream_buffer.c
+    FreeRTOS/Source/tasks.c
+    FreeRTOS/Source/timers.c
+    FreeRTOS/Portable/GCC/ARM_CM3/port.c
+    FreeRTOS/Portable/MemMang/heap_4.c
 )
 
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
+    ${CMAKE_CURRENT_SOURCE_DIR}/FreeRTOS/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/FreeRTOS/Portable/GCC/ARM_CM3
 )
 
 # Add project symbols (macros)
