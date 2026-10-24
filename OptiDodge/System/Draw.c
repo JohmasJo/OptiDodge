@@ -90,6 +90,14 @@ void Set_Ball_D(uint8_t Diameter){
 }
 
 /**
+ * @brief 将设置圆的直径暴露给外部程序
+ * @return 输出程序内的小球直径
+ */
+uint8_t Get_Ball_D(void) {
+    return D_CIRCLE;
+}
+
+/**
  * @brief 将小球画到传入的画布上
  * @param current_canvas 要绘制的画布，此处传入画布地址
  * @param anchor_x 小球的左上角坐标x

@@ -35,7 +35,9 @@ enable_language(C ASM)
 add_executable(${CMAKE_PROJECT_NAME}
         System/Draw.c
         System/Draw.h
-        System/Pattern.h)
+        System/Pattern.h
+        System/Game.h
+        System/Game.c)
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
