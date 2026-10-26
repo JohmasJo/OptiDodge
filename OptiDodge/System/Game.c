@@ -4,14 +4,20 @@
 
 /* Includes */
 #include "stm32f1xx_hal.h"
+#include <stdlib.h>
 #include "Draw.h"
 #include "Game.h"
 #include "Pattern.h"
 
 /* Varieties */
 
-
 /* Structure */
+
+typedef struct {
+    int8_t inward;   // 朝屏幕内部的速度，必须 > 0
+    int8_t along;    // 沿出生边移动的速度
+} Ball_Velocity;
+
 typedef struct{
     uint16_t player_x;
     uint16_t player_y;
@@ -25,8 +31,8 @@ typedef struct{
     int16_t x;
     int16_t y;
 
-    uint8_t x_velocity; //1tick在x上的移动距离，1tick是40ms，游戏采用25fps视为1个时间刻
-    uint8_t y_velocity;
+    int8_t x_velocity; //1tick在x上的移动距离，1tick是40ms，游戏采用25fps视为1个时间刻
+    int8_t y_velocity;
 
     uint8_t isActive;
 }Ball;
@@ -36,6 +42,38 @@ typedef struct{
     Ball ball[MAX_BALLS];
     uint32_t score;
 }Gaming_Info;
+
+/*
+ * 每项都满足：
+ * inward > 0
+ * 4 <= inward² + along² <= 25
+ *
+ * 保存该范围内全部合法的整数速度组合。
+ * 范围改变时，需要重新生成此表。
+ */
+static const Ball_Velocity Velocity_Table[] = {
+    {1, -4}, {1, -3}, {1, -2},
+    {1,  2}, {1,  3}, {1,  4},
+
+    {2, -4}, {2, -3}, {2, -2}, {2, -1},
+    {2,  0},
+    {2,  1}, {2,  2}, {2,  3}, {2,  4},
+
+    {3, -4}, {3, -3}, {3, -2}, {3, -1},
+    {3,  0},
+    {3,  1}, {3,  2}, {3,  3}, {3,  4},
+
+    {4, -3}, {4, -2}, {4, -1},
+    {4,  0},
+    {4,  1}, {4,  2}, {4,  3},
+
+    {5,  0}
+};
+
+/*enum*/
+typedef enum{left, right, up, down} Side;
+typedef enum{CrTrue = 1, CrFalse = 0} uCreateOut;
+
 
 /* Functions*/
 /**
@@ -109,4 +147,116 @@ uint8_t Collision_Detect(Ball* ball, Player* player) {
     }
     
     return CollisionFalse;
+}
+
+/**
+ * @brief 生成随机的X坐标
+ * @return 随机的X坐标
+ */
+int16_t Random_Ball_X(void) {
+    return random() % (SCREEN_WIDTH + Get_Ball_D()) - Get_Ball_D();
+}
+
+/**
+ * @brief 生成随机的Y坐标
+ * @return 随机的Y坐标
+ */
+int16_t Random_Ball_Y(void) {
+    return random() % (SCREEN_HEIGHT + Get_Ball_D()) - Get_Ball_D();
+}
+
+/**
+ * @brief 生产随机的小球出生边，为左右上下
+ * @return 边
+ */
+Side Random_Side(void) {
+    return (Side)(random() % 4);
+}
+
+/**
+ * @brief 根据小球所在的出生边，生成范围在2~5之间的预制整型速度
+ * @param side 小球生成的边
+ * @return对应的xy速度对
+ */
+int8_t* Random_Ball_XY_Velocity(Side side) {
+    static int8_t Velocity[2];
+
+    uint8_t Table_Count = sizeof(Velocity_Table) / sizeof(Velocity_Table[0]);
+    uint8_t ran_index = random() % Table_Count;
+
+    int8_t inward = Velocity_Table[ran_index].inward;
+    int8_t along = Velocity_Table[ran_index].along;
+
+    // 根据出生边，把“向内、沿边”转换为 x、y 速度。
+    switch (side) {
+        case left:
+            Velocity[0] = inward;
+            Velocity[1] = along;
+            break;
+
+        case right:
+            Velocity[0] = -inward;
+            Velocity[1] = along;
+            break;
+
+        case up:
+            Velocity[0] = along;
+            Velocity[1] = inward;
+            break;
+
+        case down:
+            Velocity[0] = along;
+            Velocity[1] = -inward;
+            break;
+
+        default:
+            return NULL;
+    }
+
+    return Velocity;
+}
+
+/**
+ * @brief 创建一个新的小球并刷新小球的状态为Active
+ * @param ball 单个小球对象
+ * @return 返回是否生成成功
+ */
+uCreateOut Create_New_Ball(Ball* ball) {
+    Side side = Random_Side();
+
+    // 根据出生边确定一个坐标，
+    // 另一个坐标沿这条边随机生成。
+    switch (side) {
+        case left:
+            ball->x = 0;
+            ball->y = Random_Ball_Y();
+            break;
+
+        case right:
+            ball->x = SCREEN_WIDTH - 1;
+            ball->y = Random_Ball_Y();
+            break;
+
+        case up:
+            ball->x = Random_Ball_X();
+            ball->y = 0;
+            break;
+
+        case down:
+            ball->x = Random_Ball_X();
+            ball->y = SCREEN_HEIGHT - 1;
+            break;
+    }
+
+    int8_t* Velocity = Random_Ball_XY_Velocity(side);
+    if (Velocity == NULL) {
+        return CrFalse;
+    }
+
+    // 返回数组会在下次调用时被覆盖，因此立即复制。
+    ball->x_velocity = Velocity[0];
+    ball->y_velocity = Velocity[1];
+    // 所有信息设置完成，再激活小球。
+    ball->isActive = ACTIVE;
+    return CrTrue;
 }

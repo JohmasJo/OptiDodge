@@ -39,7 +39,14 @@ add_executable(${CMAKE_PROJECT_NAME}
         System/Game.h
         System/Game.c
         System/FreeRTOS_Program.c
-        System/FreeRTOS_Program.h)
+        System/FreeRTOS_Program.h
+        Hardware/W25Q64.c
+        Hardware/W25Q64.h
+        System/Score.c
+        System/Score.h
+        System/Setting.c
+        System/Setting.h
+        System/Setting_Index.h)
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
@@ -66,6 +73,8 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
+    ${CMAKE_CURRENT_SOURCE_DIR}/Hardware
+    ${CMAKE_CURRENT_SOURCE_DIR}/System
     ${CMAKE_CURRENT_SOURCE_DIR}/FreeRTOS/include
     ${CMAKE_CURRENT_SOURCE_DIR}/FreeRTOS/Portable/GCC/ARM_CM3
 )

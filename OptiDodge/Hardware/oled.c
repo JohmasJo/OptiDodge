@@ -30,7 +30,8 @@
 
 #include "oled.h"
 #include "stdlib.h"
-#include "oledfont.h"  	 
+#include "oledfont.h"
+#include "Pattern.h"
 //OLED的显存
 //存放格式如下.
 //[0]0 1 2 3 ... 127	
@@ -65,6 +66,15 @@ void OLED_WR_Byte(u8 dat,u8 cmd)
 //cmd:数据/命令标志 0,表示命令;1,表示数据;
 /* hspi1 已经在 main.c 中定义，这里只引用 */
 extern SPI_HandleTypeDef hspi1;
+Font_Size font_size;
+
+void Set_Font_size(Font_Size size) {
+	font_size = size;
+}
+
+u8 Get_Font_Size(void) {
+	return((u8)font_size);
+}
 
 void OLED_WR_Byte(u8 dat, u8 cmd)
 {
@@ -218,7 +228,27 @@ void OLED_DrawBMP(unsigned char x0, unsigned char y0,unsigned char x1, unsigned 
 	    	OLED_WR_Byte(BMP[j++],OLED_DATA);	    	
 	    }
 	}
-} 
+}
+
+/**
+ * 在屏幕右上角写入目前的分数
+ * @param score 传入分数
+ */
+void OLED_ShowScore(uint32_t score) {
+	Set_Font_size(SMALL);
+	uint8_t temp = 0;
+	uint8_t digits = 1;
+	const uint8_t Font_Width = 6;
+	do {
+		temp = score % 10;
+		OLED_ShowChar(
+			SCREEN_WIDTH - Font_Width * digits,
+			0,
+			'0' + temp);
+		score /= 10;
+		digits ++;
+	}while(score != 0);
+}
 
 
 //初始化SSD1306					    
@@ -264,7 +294,6 @@ void OLED_Init(void)
 	OLED_Clear();
 	OLED_Set_Pos(0,0); 	
 }  
-
 
 
 

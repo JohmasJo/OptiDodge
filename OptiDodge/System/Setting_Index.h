@@ -1,0 +1,16 @@
+//
+// Created by wangy on 2026/10/27.
+//
+
+#ifndef OPTIDODGE_SETTING_INDEX_H
+#define OPTIDODGE_SETTING_INDEX_H
+
+#define BALL_SIZE_Ind 0
+#define DIFFICULTY_Ind 1
+#define DPI_Ind 2
+
+#define DEFAULT_BALL_SIZE 7
+#define DEFAULT_DIFFICULTY 1
+#define DEFAULT_DPI 1200
+
+#endif //OPTIDODGE_SETTING_INDEX_H

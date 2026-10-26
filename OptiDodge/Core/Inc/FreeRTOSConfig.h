@@ -86,5 +86,8 @@ NVIC value of 255. */
 #define vPortSVCHandler     SVC_Handler
 #define INCLUDE_xTaskGetSchedulerState   1
 
+//启动软件定时器
+#define configUSE_TIMERS 1
+
 #endif /* FREERTOS_CONFIG_H */
 

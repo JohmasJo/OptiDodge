@@ -30,12 +30,13 @@
 #ifndef __OLED_H
 #define __OLED_H			  	 
 #include "main.h"
+
 #include "stdlib.h"	    	
 //OLED模式设置
 //0:4线串行模式
 //1:并行8080模式
 #define OLED_MODE 0
-#define SIZE 16
+#define SIZE Get_Font_Size()
 #define XLevelL		0x00
 #define XLevelH		0x10
 #define Max_Column	128
@@ -81,6 +82,14 @@
 typedef uint8_t  u8;
 typedef uint16_t u16;
 typedef uint32_t u32;
+typedef enum {
+	SMALL = 8,
+	LARGE = 16
+} Font_Size;
+
+//修改字体API
+void Set_Font_size(Font_Size size);
+u8 Get_Font_Size(void);
 
 //OLED控制用函数
 void OLED_WR_Byte(u8 dat,u8 cmd);	    
@@ -95,6 +104,7 @@ void OLED_ShowNum(u8 x,u8 y,u32 num,u8 len,u8 size);
 void OLED_ShowString(u8 x,u8 y, u8 *p);	 
 void OLED_Set_Pos(unsigned char x, unsigned char y);
 void OLED_ShowCHinese(u8 x,u8 y,u8 no);
+void OLED_ShowScore(u32 score);
 void OLED_DrawBMP(unsigned char x0, unsigned char y0,unsigned char x1, unsigned char y1,unsigned char BMP[]);
 #endif  
 	 
