@@ -159,7 +159,7 @@ void draw_Ball(unsigned char* current_canvas, int16_t anchor_x, int8_t anchor_y)
 void draw_Player(unsigned char* current_canvas, int16_t Player_x, int8_t Player_y) {
     if (Player_x > - PLAYER_WIDTH &&
         Player_x < SCREEN_WIDTH &&
-        Player_y >- PLAYER_HEIGHT &&
+        Player_y > - PLAYER_HEIGHT &&
         Player_y < SCREEN_HEIGHT)
     {
         int16_t anchor_x = Player_x - PLAYER_HEIGHT / 2;

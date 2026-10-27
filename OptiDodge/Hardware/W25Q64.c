@@ -62,7 +62,7 @@ void W25Q64_WriteEnable(void){
  * @brief 等待W25Q64忙
  */
 void W25Q64_WaitBusy(void){//读状态寄存器1，看最低位，是否设备在忙
-    uint32_t Timeout;
+    uint32_t Timeout = 10000;
     W25Q64_Enable();
     W25Q64_SwapByte(W25Q64_READ_STATUS_REGISTER_1);
     while((W25Q64_SwapByte(W25Q64_DUMMY_BYTE) & 0x01) == 0x01){

@@ -185,14 +185,28 @@ void OLED_ShowNum(u8 x,u8 y,u32 num,u8 len,u8 size)
 	}
 } 
 //显示一个字符号串
-void OLED_ShowString(u8 x,u8 y,u8 *chr)
+void OLED_ShowString(u8 x, u8 y, u8 *chr)
 {
-	unsigned char j=0;
-	while (chr[j]!='\0')
-	{		OLED_ShowChar(x,y,chr[j]);
-			x+=8;
-		if(x>120){x=0;y+=2;}
-			j++;
+	unsigned char j = 0;
+
+	u8 Font_Width = (SIZE == 16) ? 8 : 6;
+	u8 Font_Pages = (SIZE == 16) ? 2 : 1;
+
+	while (chr[j] != '\0') {
+		if (y + Font_Pages > 8) {
+			break;
+		}
+
+		OLED_ShowChar(x, y, chr[j]);
+
+		x += Font_Width;
+
+		if (x > Max_Column - Font_Width) {
+			x = 0;
+			y += Font_Pages;
+		}
+
+		j++;
 	}
 }
 //显示汉字

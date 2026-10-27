@@ -46,7 +46,12 @@ add_executable(${CMAKE_PROJECT_NAME}
         System/Score.h
         System/Setting.c
         System/Setting.h
-        System/Setting_Index.h)
+        System/Setting_Index.h
+        Hardware/Key.c
+        Hardware/Key.h
+        Interface/Menu.c
+        Interface/Menu.h
+)
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)

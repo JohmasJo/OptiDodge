@@ -22,11 +22,17 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <string.h>
+#include <stdio.h>
 #include "oled.h"
 #include "Draw.h"
 #include "../../Hardware/oled.h"
 #include "../../System/Draw.h"
 #include "../../System/Pattern.h"
+#include "Menu.h"
+#include "Score.h"
+#include "Setting.h"
+#include "W25Q64.h"
+#include "../../Interface/Menu.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -110,23 +116,33 @@ __HAL_SPI_ENABLE(&hspi1);
   OLED_Init();
   OLED_WR_Byte(0xA4, OLED_CMD);  // 恢复显示显存内容
   OLED_Clear();
-  int16_t ball_x = -5;
-  int8_t ball_y = 0;
-  Set_Ball_D(20);
+  uint8_t MID = 0;
+uint16_t DID = 0;
+uint32_t Run_Count = 0;
+char text[20];
+
+Set_Font_size(SMALL);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    memset(Canvas_User, 0, sizeof(Canvas_User));
-    draw_Ball(Canvas_User, ball_x, ball_y);
-    draw_Player(Canvas_User, ball_x, ball_y);
-    OLED_DrawBMP(0,0,127,7,Canvas_User);
-    ball_x += 2;
-    ball_y ++;
-    if (ball_x >= SCREEN_WIDTH){ball_x = -5;}
-    if (ball_y >= SCREEN_HEIGHT){ball_y = 0;}
+	  W25Q24_GetID(&MID, &DID);
+
+    snprintf(text, sizeof(text),
+             "MID:%02X", (unsigned int)MID);
+    OLED_ShowString(0, 0, (uint8_t*)text);
+
+    snprintf(text, sizeof(text),
+             "DID:%04X", (unsigned int)DID);
+    OLED_ShowString(0, 2, (uint8_t*)text);
+
+    snprintf(text, sizeof(text),
+             "RUN:%lu", (unsigned long)Run_Count++);
+    OLED_ShowString(0, 4, (uint8_t*)text);
+
+    HAL_Delay(500);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -263,8 +279,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LED_TEST_Pin|OLED_RESET_Pin|OLED_COMMAND_Pin|PAW3327_NCS_Pin
-                          |W25Q64_NCS_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LED_TEST_Pin|OLED_RESET_Pin|OLED_COMMAND_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, PAW3327_NCS_Pin|W25Q64_NCS_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin : LED_TEST_Pin */
   GPIO_InitStruct.Pin = LED_TEST_Pin;

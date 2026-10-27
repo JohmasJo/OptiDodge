@@ -145,8 +145,6 @@ uint8_t Collision_Detect(Ball* ball, Player* player) {
             return CollisionFalse;
         }
     }
-    
-    return CollisionFalse;
 }
 
 /**
@@ -154,7 +152,7 @@ uint8_t Collision_Detect(Ball* ball, Player* player) {
  * @return 随机的X坐标
  */
 int16_t Random_Ball_X(void) {
-    return random() % (SCREEN_WIDTH + Get_Ball_D()) - Get_Ball_D();
+    return rand() % (SCREEN_WIDTH + Get_Ball_D()) - Get_Ball_D();
 }
 
 /**
@@ -162,7 +160,7 @@ int16_t Random_Ball_X(void) {
  * @return 随机的Y坐标
  */
 int16_t Random_Ball_Y(void) {
-    return random() % (SCREEN_HEIGHT + Get_Ball_D()) - Get_Ball_D();
+    return rand() % (SCREEN_HEIGHT + Get_Ball_D()) - Get_Ball_D();
 }
 
 /**
@@ -170,7 +168,7 @@ int16_t Random_Ball_Y(void) {
  * @return 边
  */
 Side Random_Side(void) {
-    return (Side)(random() % 4);
+    return (Side)(rand() % 4);
 }
 
 /**
@@ -182,7 +180,7 @@ int8_t* Random_Ball_XY_Velocity(Side side) {
     static int8_t Velocity[2];
 
     uint8_t Table_Count = sizeof(Velocity_Table) / sizeof(Velocity_Table[0]);
-    uint8_t ran_index = random() % Table_Count;
+    uint8_t ran_index = rand() % Table_Count;
 
     int8_t inward = Velocity_Table[ran_index].inward;
     int8_t along = Velocity_Table[ran_index].along;

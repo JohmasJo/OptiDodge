@@ -86,8 +86,11 @@ NVIC value of 255. */
 #define vPortSVCHandler     SVC_Handler
 #define INCLUDE_xTaskGetSchedulerState   1
 
-//启动软件定时器
-#define configUSE_TIMERS 1
+/* 软件定时器相关定义 */
+#define configUSE_TIMERS 1 //1:使能软件定时器,默认:0。使能后需指定下面3个
+#define configTIMER_TASK_PRIORITY (configMAX_PRIORITIES - 1) //定义软件定时器任务的优先级
+#define configTIMER_QUEUE_LENGTH 5 //定义软件定时器命令队列的长度
+#define configTIMER_TASK_STACK_DEPTH (configMINIMAL_STACK_SIZE * 2) //定义软件定时器任务的栈空间大小
 
 #endif /* FREERTOS_CONFIG_H */
 

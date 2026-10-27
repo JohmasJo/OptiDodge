@@ -8,11 +8,9 @@
 #include "main.h"
 #include "W25Q64.h"
 #include "string.h"
-#define W25Q64_START_ADDRESS 0x00001000
-#define SCORE_WIDTH 4
 
-uint32_t All_Score[100] = {0};
-uint32_t Count = 0;
+uint32_t All_Score[MAX_SCORE_COUNT] = {0};
+uint8_t Score_Count = 0;
 
 /**
  * @brief 调整最小堆，使父节点不大于子节点
@@ -61,25 +59,25 @@ void Sort_All_Scores(void)
 {
     uint32_t i;
 
-    if (Count > sizeof(All_Score) / sizeof(All_Score[0])) {
+    if (Score_Count > sizeof(All_Score) / sizeof(All_Score[0])) {
         return;
     }
 
-    if (Count < 2) {
+    if (Score_Count < 2) {
         return;
     }
 
     // 第一步：建立最小堆。
     // 从最后一个非叶子节点开始，逐个向前调整。
     // 使用 i > 0，避免无符号变量递减到 0 后溢出。
-    for (i = Count / 2; i > 0; i--) {
-        Score_Heap_Adjust(All_Score, Count, i - 1);
+    for (i = Score_Count / 2; i > 0; i--) {
+        Score_Heap_Adjust(All_Score, Score_Count, i - 1);
     }
 
     // 第二步：每次把堆顶的最小值移到末尾。
     // 缩小堆的范围后，重新调整堆顶。
     // 最终得到从高到低的顺序。
-    for (i = Count - 1; i > 0; i--) {
+    for (i = Score_Count - 1; i > 0; i--) {
         uint32_t temp = All_Score[0];
         All_Score[0] = All_Score[i];
         All_Score[i] = temp;
@@ -93,16 +91,16 @@ void Sort_All_Scores(void)
  */
 void Load_All_Score(void) {
     uint32_t i;
-    W25Q64_ReadData((uint8_t*)&Count, SCORE_WIDTH, W25Q64_START_ADDRESS);
+    W25Q64_ReadData((uint8_t*)&Score_Count, SCORE_WIDTH, W25Q64_START_ADDRESS);
 
     // 未保存过数据，或读出的数量异常。
-    if (Count > sizeof(All_Score) / sizeof(All_Score[0])) {
-        Count = 0;
+    if (Score_Count > sizeof(All_Score) / sizeof(All_Score[0])) {
+        Score_Count = 0;
     }
 
     memset(All_Score, 0, sizeof(All_Score));
 
-    for (i = 0; i < Count; i++) {
+    for (i = 0; i < Score_Count; i++) {
         W25Q64_ReadData(
             (uint8_t*)&All_Score[i],
             SCORE_WIDTH,
@@ -120,9 +118,9 @@ void Save_All_Scores(void) {
     W25Q64_SectorErase(W25Q64_START_ADDRESS);
     W25Q64_PageProgram(
         W25Q64_START_ADDRESS,
-        (uint8_t *)&Count,
+        (uint8_t *)&Score_Count,
         SCORE_WIDTH);
-    for (i = 0; i < Count; i++) {
+    for (i = 0; i < Score_Count; i++) {
         W25Q64_PageProgram(
             W25Q64_START_ADDRESS + SCORE_WIDTH + i * SCORE_WIDTH,
             (uint8_t*)&All_Score[i],
@@ -131,6 +129,7 @@ void Save_All_Scores(void) {
 }
 
 void Clear_All_Scores(void) {
+    Score_Count = 0;
     memset(All_Score, 0, sizeof(All_Score));
     W25Q64_SectorErase(W25Q64_START_ADDRESS);
 }
@@ -145,24 +144,24 @@ uint8_t Insert_Score(uint32_t NewScore)
 {
     uint32_t Max_Count = sizeof(All_Score) / sizeof(All_Score[0]);
 
-    if (Count > Max_Count) {
+    if (Score_Count > Max_Count) {
         return 0;
     }
 
     // 排行榜已满时，新分数必须严格大于最后一名。
-    if (Count == Max_Count) {
-        if (NewScore <= All_Score[Count - 1]) {
+    if (Score_Count == Max_Count) {
+        if (NewScore <= All_Score[Score_Count - 1]) {
             return 0;
         }
 
         // 缩小有效范围，相当于先删除最后一名。
         // 原位置的数据随后会被覆盖，不需要单独清零。
-        Count--;
+        Score_Count--;
     }
 
     // 在 [left, right) 中二分查找插入位置。
     uint32_t left = 0;
-    uint32_t right = Count;
+    uint32_t right = Score_Count;
 
     while (left < right) {
         uint32_t mid = left + (right - left) / 2;
@@ -179,12 +178,12 @@ uint8_t Insert_Score(uint32_t NewScore)
 
     // 此时 left 就是插入位置。
     // 从后向前搬移，避免覆盖尚未移动的数据。
-    for (uint32_t i = Count; i > left; i--) {
+    for (uint32_t i = Score_Count; i > left; i--) {
         All_Score[i] = All_Score[i - 1];
     }
 
     All_Score[left] = NewScore;
-    Count++;
+    Score_Count++;
 
     return 1;
 }

@@ -31,7 +31,7 @@ void RTOS_Init(void) {
  * 初始化任务，负责初始化所有的
  * @param pvParameters 任务传参列表
  */
-void InitTask(void *pvParameters); {
+void InitTask(void *pvParameters) {
     taskENTER_CRITICAL();//进入临界区，防止初始化被中断打扰
 
     taskEXIT_CRITICAL();//退出临界区

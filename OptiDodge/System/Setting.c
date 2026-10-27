@@ -13,11 +13,7 @@
 #define SETTING_WIDTH_2 2
 #define SETTING_COUNT 3
 
-typedef struct {
-    uint8_t Ball_Size;
-    uint8_t Difficulty;
-    uint16_t DPI;
-}Game_Setting;
+uint16_t DPI_List[] = {800, 1200, 2400, 4800};
 
 Game_Setting Default_Game_Setting = {
     DEFAULT_BALL_SIZE,
@@ -111,5 +107,5 @@ void Change_Difficulty(uint8_t Difficulty) {
  * @param DPI 目标DPI值
  */
 void Change_DPI(uint8_t DPI) {
-    Real_Game_Setting.DPI = DPI;
+    Real_Game_Setting.DPI = DPI_List[DPI];
 }

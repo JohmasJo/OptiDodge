@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xB</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;../Hardware;../System;../FreeRTOS/include;../FreeRTOS/Portable/RVDS/ARM_CM3</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;../Hardware;../System;../FreeRTOS/include;../FreeRTOS/Portable/RVDS/ARM_CM3;../Interface</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -720,6 +720,31 @@
               <FileType>5</FileType>
               <FilePath>..\Hardware\oledfont.h</FilePath>
             </File>
+            <File>
+              <FileName>W25Q64.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hardware\W25Q64.c</FilePath>
+            </File>
+            <File>
+              <FileName>W25Q64.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Hardware\W25Q64.h</FilePath>
+            </File>
+            <File>
+              <FileName>W25Q64_Ins.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Hardware\W25Q64_Ins.h</FilePath>
+            </File>
+            <File>
+              <FileName>Key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hardware\Key.c</FilePath>
+            </File>
+            <File>
+              <FileName>Key.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Hardware\Key.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -749,6 +774,41 @@
               <FileName>Game.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\System\Game.h</FilePath>
+            </File>
+            <File>
+              <FileName>FreeRTOS_Program.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\System\FreeRTOS_Program.c</FilePath>
+            </File>
+            <File>
+              <FileName>FreeRTOS_Program.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\System\FreeRTOS_Program.h</FilePath>
+            </File>
+            <File>
+              <FileName>Score.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\System\Score.c</FilePath>
+            </File>
+            <File>
+              <FileName>Score.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\System\Score.h</FilePath>
+            </File>
+            <File>
+              <FileName>Setting.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\System\Setting.c</FilePath>
+            </File>
+            <File>
+              <FileName>Setting.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\System\Setting.h</FilePath>
+            </File>
+            <File>
+              <FileName>Setting_Index.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\System\Setting_Index.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -809,6 +869,21 @@
               <FileName>portmacro.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\FreeRTOS\Portable\RVDS\ARM_CM3\portmacro.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Interface</GroupName>
+          <Files>
+            <File>
+              <FileName>Menu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Interface\Menu.c</FilePath>
+            </File>
+            <File>
+              <FileName>Menu.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Interface\Menu.h</FilePath>
             </File>
           </Files>
         </Group>

@@ -11,7 +11,8 @@
 #define PLAYER_HEIGHT 5
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
-#define MAX_D_CIRCLE 30
+#define MAX_D_CIRCLE 20
+#define MIN_D_CIRCLE 3
 #define MAX_BALLS 20
 #define OLED_PAGE_SIZE 8
 
