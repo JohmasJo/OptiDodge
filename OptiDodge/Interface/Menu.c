@@ -59,7 +59,9 @@ CreateGame Menu_Task(void) {
     return GaFalse;
 }
 
-void Display_Menu(void) {
+CreateGame Display_Menu(void) {
+    CreateGame isStart;
+    isStart = Menu_Task();
     uint8_t i;
     Set_Font_size(LARGE);
     OLED_ShowString(0,0,(uint8_t *)"Menu");
@@ -71,6 +73,7 @@ void Display_Menu(void) {
         OLED_ShowString(64, i, (uint8_t *)"    ");
     }
     OLED_ShowString(64, selected_menu_item + 2, (uint8_t *)"<-");
+    return isStart;
 }
 
 void Display_Rank(void) {
@@ -237,4 +240,12 @@ void Display_Setting(void) {
             OLED_ShowString(108, i+2, (uint8_t*)" ");
         }
     }
+}
+
+MenuPage Get_Page(void) {
+    return current_page;
+}
+
+void Set_Page(MenuPage page) {
+    current_page = page;
 }

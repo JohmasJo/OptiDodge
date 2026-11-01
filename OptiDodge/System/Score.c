@@ -5,7 +5,7 @@
 //所有分数的排行榜占第二个扇区，起始地址0x00001000
 
 #include "Score.h"
-#include "main.h"
+#include <stdint.h>
 #include "W25Q64.h"
 #include "string.h"
 

@@ -18,61 +18,27 @@ typedef struct {
     int8_t along;    // 沿出生边移动的速度
 } Ball_Velocity;
 
-typedef struct{
-    uint16_t player_x;
-    uint16_t player_y;
 
-    int16_t player_delta_x;
-    int16_t player_delta_y;
-
-}Player;
-
-typedef struct{
-    int16_t x;
-    int16_t y;
-
-    int8_t x_velocity; //1tick在x上的移动距离，1tick是40ms，游戏采用25fps视为1个时间刻
-    int8_t y_velocity;
-
-    uint8_t isActive;
-}Ball;
-
-typedef struct{
-    Player player;
-    Ball ball[MAX_BALLS];
-    uint32_t score;
-}Gaming_Info;
 
 /*
  * 每项都满足：
  * inward > 0
- * 4 <= inward² + along² <= 25
- *
- * 保存该范围内全部合法的整数速度组合。
- * 范围改变时，需要重新生成此表。
+ * 1 <= inward² + along² <= 9
  */
 static const Ball_Velocity Velocity_Table[] = {
-    {1, -4}, {1, -3}, {1, -2},
-    {1,  2}, {1,  3}, {1,  4},
+    {1, -2}, {1, -1},
+    {1,  0},
+    {1,  1}, {1,  2},
 
-    {2, -4}, {2, -3}, {2, -2}, {2, -1},
+    {2, -2}, {2, -1},
     {2,  0},
-    {2,  1}, {2,  2}, {2,  3}, {2,  4},
+    {2,  1}, {2,  2},
 
-    {3, -4}, {3, -3}, {3, -2}, {3, -1},
-    {3,  0},
-    {3,  1}, {3,  2}, {3,  3}, {3,  4},
-
-    {4, -3}, {4, -2}, {4, -1},
-    {4,  0},
-    {4,  1}, {4,  2}, {4,  3},
-
-    {5,  0}
+    {3,  0}
 };
 
 /*enum*/
 typedef enum{left, right, up, down} Side;
-typedef enum{CrTrue = 1, CrFalse = 0} uCreateOut;
 
 
 /* Functions*/
@@ -97,7 +63,7 @@ uint8_t Collision_Detect(Ball* ball, Player* player) {
     int16_t move_y = ball->y_velocity - player->player_delta_y;
 
     //计算两个物体间的最小允许距离：将两者的半径进行相加
-    int16_t radius_sum = PLAYER_RADIUS + Ball_radius / 2;
+    int16_t radius_sum = PLAYER_RADIUS + Ball_radius;
     //使用乘方来防止进行开方运算
     uint32_t min_distance_squared = (int32_t)radius_sum * radius_sum;
     uint32_t start_distance_squared = (int32_t)start_x * start_x + (int32_t)start_y * start_y;
@@ -123,7 +89,7 @@ uint8_t Collision_Detect(Ball* ball, Player* player) {
         int16_t end_y = start_y + move_y;
 
         uint32_t end_distance_squared = (int32_t)end_x * end_x + end_y * end_y;
-        if (end_distance_squared < min_distance_squared) {
+        if (end_distance_squared <= min_distance_squared) {
             return CollisionTrue;
         }
         else {
@@ -257,4 +223,30 @@ uCreateOut Create_New_Ball(Ball* ball) {
     // 所有信息设置完成，再激活小球。
     ball->isActive = ACTIVE;
     return CrTrue;
+}
+
+uint8_t Update_Game(Gaming_Info *info) {
+    uint8_t isGameOver = GameEndFalse;
+    uint8_t i;
+    for (i = 0; i < MAX_BALLS; i++)
+    {
+        if (info->ball[i].isActive == INACTIVE) {
+            continue;
+        }
+        if (Collision_Detect(&info->ball[i],&info->player ) == CollisionTrue) {
+            isGameOver = GameEndTrue;
+        }
+        info->ball[i].x += info->ball[i].x_velocity;
+        info->ball[i].y += info->ball[i].y_velocity;
+        if (info->ball[i].x > SCREEN_WIDTH
+            || info->ball[i].x < 0
+            || info->ball[i].y > SCREEN_HEIGHT
+            || info->ball[i].y < 0) {
+            info->ball[i].isActive = INACTIVE;
+        }
+    }
+    info->player.player_x += info->player.player_delta_x;
+    info->player.player_y += info->player.player_delta_y;
+    info->score += 20;
+    return isGameOver;
 }

@@ -9,7 +9,7 @@
 #define DIFFICULTY_Ind 1
 #define DPI_Ind 2
 
-#define DEFAULT_BALL_SIZE 7
+#define DEFAULT_BALL_SIZE 13
 #define DEFAULT_DIFFICULTY 1
 #define DEFAULT_DPI 1200
 

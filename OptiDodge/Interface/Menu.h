@@ -34,9 +34,10 @@ typedef enum {
     GaTrue = 1
 }CreateGame;
 
-CreateGame Menu_Task(void);
-void Display_Menu(void);
+CreateGame Display_Menu(void);
 void Display_Rank(void);
 void Display_Setting(void);
+MenuPage Get_Page(void);
+void Set_Page(MenuPage page);
 
 #endif //OPTIDODGE_MENU_H

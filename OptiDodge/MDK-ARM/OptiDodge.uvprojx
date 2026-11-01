@@ -745,6 +745,21 @@
               <FileType>5</FileType>
               <FilePath>..\Hardware\Key.h</FilePath>
             </File>
+            <File>
+              <FileName>PAW3327.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hardware\PAW3327.c</FilePath>
+            </File>
+            <File>
+              <FileName>PAW3327.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Hardware\PAW3327.h</FilePath>
+            </File>
+            <File>
+              <FileName>PAW3327_Ins.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Hardware\PAW3327_Ins.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -809,6 +824,11 @@
               <FileName>Setting_Index.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\System\Setting_Index.h</FilePath>
+            </File>
+            <File>
+              <FileName>Common.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\System\Common.h</FilePath>
             </File>
           </Files>
         </Group>

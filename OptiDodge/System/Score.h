@@ -4,7 +4,7 @@
 
 #ifndef OPTIDODGE_SCORE_H
 #define OPTIDODGE_SCORE_H
-#include "main.h"
+#include <stdint.h>
 
 #define W25Q64_START_ADDRESS 0x00001000
 #define SCORE_WIDTH 4

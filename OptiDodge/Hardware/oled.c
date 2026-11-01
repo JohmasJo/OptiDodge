@@ -32,6 +32,8 @@
 #include "stdlib.h"
 #include "oledfont.h"
 #include "Pattern.h"
+#include "FreeRTOS.h"
+#include "task.h"
 //OLED的显存
 //存放格式如下.
 //[0]0 1 2 3 ... 127	
@@ -78,6 +80,7 @@ u8 Get_Font_Size(void) {
 
 void OLED_WR_Byte(u8 dat, u8 cmd)
 {
+	taskENTER_CRITICAL();
 	if (cmd == OLED_DATA)
 		OLED_DC_Set();
 	else
@@ -89,6 +92,7 @@ void OLED_WR_Byte(u8 dat, u8 cmd)
 		Error_Handler();
 
 	OLED_CS_Set();
+	taskEXIT_CRITICAL();
 }
 
 #endif

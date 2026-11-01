@@ -13,7 +13,7 @@
 #define SETTING_WIDTH_2 2
 #define SETTING_COUNT 3
 
-uint16_t DPI_List[] = {800, 1200, 2400, 4800};
+uint16_t DPI_List[] = {1200, 2400, 4800};
 
 Game_Setting Default_Game_Setting = {
     DEFAULT_BALL_SIZE,
@@ -92,6 +92,10 @@ uCreateOut Save_Setting(void) {
 void Change_Ball_Size(uint8_t Ball_Size) {
     Real_Game_Setting.Ball_Size = Ball_Size;
     Set_Ball_D(Ball_Size);
+}
+
+uint8_t Get_Setting_Ball_Size(void) {
+    return Real_Game_Setting.Ball_Size;
 }
 
 /**

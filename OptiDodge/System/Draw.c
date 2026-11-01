@@ -111,16 +111,24 @@ void draw_Ball(unsigned char* current_canvas, int16_t anchor_x, int8_t anchor_y)
     {
         uint8_t y_offset;
         uint8_t Cross_Page;
+        int16_t index_start;
         if (anchor_y < 0) {
-            y_offset = OLED_PAGE_SIZE - (-anchor_y) % OLED_PAGE_SIZE;
-            Cross_Page = (anchor_y + BALL_HEIGHT) / OLED_PAGE_SIZE - (anchor_y) / OLED_PAGE_SIZE + 2;
-            //注意，C对于整数除法做的是截断，即只保留整数部分，对于 (int)-2 / 8 = 0
+            y_offset = (OLED_PAGE_SIZE - (-anchor_y) % OLED_PAGE_SIZE) % OLED_PAGE_SIZE;
+            Cross_Page = (y_offset + BALL_HEIGHT + OLED_PAGE_SIZE - 1) / OLED_PAGE_SIZE;
+            if (anchor_y % OLED_PAGE_SIZE == 0) {
+                //负数能整除8时，页地址不需要再减1
+                index_start = SCREEN_WIDTH *(anchor_y / OLED_PAGE_SIZE) + anchor_x;
+            }
+            else {
+                //负数不能整除8时，向下补一页
+                index_start = SCREEN_WIDTH *(anchor_y / OLED_PAGE_SIZE - 1) + anchor_x;
+            }
         }
         else {
-            y_offset = (anchor_y) % OLED_PAGE_SIZE;
-            Cross_Page = (anchor_y + BALL_HEIGHT) / OLED_PAGE_SIZE - (anchor_y) / OLED_PAGE_SIZE + 1;
+            y_offset = anchor_y % OLED_PAGE_SIZE;
+            Cross_Page = (y_offset + BALL_HEIGHT + OLED_PAGE_SIZE - 1) / OLED_PAGE_SIZE;
+            index_start = SCREEN_WIDTH *(anchor_y / OLED_PAGE_SIZE) + anchor_x;
         }
-        int16_t index_start = SCREEN_WIDTH *(anchor_y / OLED_PAGE_SIZE) + anchor_x;//算出起始更改的屏幕元素
         uint16_t Max_Ball_Index = BALL_WIDTH * (BALL_HEIGHT / OLED_PAGE_SIZE + 1) - 1;
         for (uint8_t y = 0; y < Cross_Page; y++){
             for (uint8_t x = 0; x < BALL_WIDTH; x++) {

@@ -51,6 +51,8 @@ add_executable(${CMAKE_PROJECT_NAME}
         Hardware/Key.h
         Interface/Menu.c
         Interface/Menu.h
+        Hardware/PAW3327.c
+        Hardware/PAW3327.h
 )
 
 # Add STM32CubeMX generated sources

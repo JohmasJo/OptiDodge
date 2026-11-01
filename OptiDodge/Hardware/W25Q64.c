@@ -5,6 +5,8 @@
 #include "W25Q64.h"
 #include "main.h"
 #include "W25Q64_Ins.h"
+#include "FreeRTOS.h"
+#include "task.h"
 
 extern SPI_HandleTypeDef hspi2;
 
@@ -29,8 +31,10 @@ void W25Q64_Disable(void) {
  * @return 接收来自从机的数据
  */
 uint8_t W25Q64_SwapByte(uint8_t SendData) {
+    taskENTER_CRITICAL();
     uint8_t ReceiveData;
     HAL_SPI_TransmitReceive(&hspi2, &SendData, &ReceiveData, 1, 100);
+    taskEXIT_CRITICAL();
     return  ReceiveData;
 }
 

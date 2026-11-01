@@ -6,6 +6,8 @@
 #ifndef OPTIDODGE_DRAW_H
 #define OPTIDODGE_DRAW_H
 
+#include <stdint.h>
+
 /* ----------------User Function----------------*/
 void Ball_Init(void);
 void Set_Ball_D(uint8_t Diameter);

@@ -6,7 +6,7 @@
 #define OPTIDODGE_PATTERN_H
 #define BALL_WIDTH Get_Ball_D()
 #define BALL_HEIGHT Get_Ball_D()
-#define PLAYER_RADIUS 1
+#define PLAYER_RADIUS 2
 #define PLAYER_WIDTH 5
 #define PLAYER_HEIGHT 5
 #define SCREEN_WIDTH 128
